@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { db } from '../services/database';
-import { Staple } from '../types/models';
+import { Staple, Department } from '../types/models';
 import { addStaple, removeStaple, updateStaple } from '../services/suggestions';
-import { v4 as uuidv4 } from 'uuid';
 
 export function Staples() {
   const { departments } = useApp();
@@ -166,7 +165,7 @@ function StapleModal({
   onSave,
 }: {
   staple?: Staple;
-  departments: typeof import('../types/models').Department[];
+  departments: Department[];
   onClose: () => void;
   onSave: () => void;
 }) {

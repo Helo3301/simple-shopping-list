@@ -2,9 +2,9 @@ import { useState, useMemo, useEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { ItemEntry } from './ItemEntry';
 import { db } from '../services/database';
-import { Collection, CollectionItem } from '../types/models';
+import { Collection, CollectionItem, ShoppingItem } from '../types/models';
 import { v4 as uuidv4 } from 'uuid';
-import { Suggestion, getSuggestions, trackItemPairs, updateStaplePurchased } from '../services/suggestions';
+import { Suggestion, getSuggestions, updateStaplePurchased } from '../services/suggestions';
 
 export function ShoppingView() {
   const {
@@ -303,7 +303,6 @@ export function ShoppingView() {
         <SaveAsCollectionModal
           items={items}
           listName={activeList.name}
-          departments={departments}
           onClose={() => setShowSaveAsCollection(false)}
         />
       )}
@@ -335,12 +334,10 @@ export function ShoppingView() {
 function SaveAsCollectionModal({
   items,
   listName,
-  departments,
   onClose,
 }: {
-  items: typeof import('../types/models').ShoppingItem[];
+  items: ShoppingItem[];
   listName: string;
-  departments: typeof import('../types/models').Department[];
   onClose: () => void;
 }) {
   const [name, setName] = useState(listName);

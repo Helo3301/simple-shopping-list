@@ -40,7 +40,7 @@ export function Collections() {
   }
 
   // Get usage count (placeholder - we'll implement this when we add the feature)
-  function getUsageCount(collectionId: string): number {
+  function getUsageCount(_collectionId: string): number {
     // TODO: Track this when collections are applied to lists
     return 0;
   }

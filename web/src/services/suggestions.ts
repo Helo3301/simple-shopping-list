@@ -1,5 +1,5 @@
 import { db } from './database';
-import { Staple, RecentItem, ShoppingItem, ItemPair } from '../types/models';
+import { Staple, ShoppingItem, ItemPair } from '../types/models';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface Suggestion {
