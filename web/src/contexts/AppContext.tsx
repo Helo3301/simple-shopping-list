@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { db } from '../services/database';
 import type { ShoppingList, ShoppingItem, Department } from '../types/models';
 
-type View = 'lists' | 'shopping';
+type View = 'lists' | 'shopping' | 'collections' | 'stores' | 'staples';
 
 interface AppContextType {
   // View management

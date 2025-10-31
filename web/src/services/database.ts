@@ -4,6 +4,12 @@ import {
   ShoppingList,
   ShoppingItem,
   RecentItem,
+  Collection,
+  CollectionItem,
+  Store,
+  StoreLayout,
+  Staple,
+  ItemPair,
   ExportData,
 } from '../types/models';
 import { createDefaultDepartments } from '../utils/defaultDepartments';
@@ -14,15 +20,58 @@ export class ShoppingListDatabase extends Dexie {
   shoppingLists!: Table<ShoppingList, string>;
   items!: Table<ShoppingItem, string>;
   recentItems!: Table<RecentItem, string>;
+  collections!: Table<Collection, string>;
+  collectionItems!: Table<CollectionItem, string>;
+  stores!: Table<Store, string>;
+  storeLayouts!: Table<StoreLayout, string>;
+  staples!: Table<Staple, string>;
+  itemPairs!: Table<ItemPair, string>;
 
   constructor() {
     super('SimpleShoppingListDB');
 
+    // Version 1: Initial schema
     this.version(1).stores({
       departments: 'id, sortOrder',
       shoppingLists: 'id, name, createdAt',
       items: 'id, listId, departmentId, isChecked, createdAt',
       recentItems: 'id, name, lastUsedAt, useCount',
+    });
+
+    // Version 2: Add Collections
+    this.version(2).stores({
+      departments: 'id, sortOrder',
+      shoppingLists: 'id, name, createdAt',
+      items: 'id, listId, departmentId, isChecked, createdAt',
+      recentItems: 'id, name, lastUsedAt, useCount',
+      collections: 'id, name, createdAt, updatedAt',
+      collectionItems: 'id, collectionId, sortOrder',
+    });
+
+    // Version 3: Add Stores
+    this.version(3).stores({
+      departments: 'id, sortOrder',
+      shoppingLists: 'id, name, createdAt',
+      items: 'id, listId, departmentId, isChecked, createdAt',
+      recentItems: 'id, name, lastUsedAt, useCount',
+      collections: 'id, name, createdAt, updatedAt',
+      collectionItems: 'id, collectionId, sortOrder',
+      stores: 'id, name, isActive, createdAt, updatedAt',
+      storeLayouts: 'id, storeId, departmentId, sortOrder',
+    });
+
+    // Version 4: Add Smart Suggestions (Staples & Item Pairs)
+    this.version(4).stores({
+      departments: 'id, sortOrder',
+      shoppingLists: 'id, name, createdAt',
+      items: 'id, listId, departmentId, isChecked, createdAt',
+      recentItems: 'id, name, lastUsedAt, useCount',
+      collections: 'id, name, createdAt, updatedAt',
+      collectionItems: 'id, collectionId, sortOrder',
+      stores: 'id, name, isActive, createdAt, updatedAt',
+      storeLayouts: 'id, storeId, departmentId, sortOrder',
+      staples: 'id, name, frequency, lastPurchased, createdAt',
+      itemPairs: 'id, item1, item2, count, lastSeen',
     });
   }
 }
@@ -49,20 +98,32 @@ export async function initializeDatabase(): Promise<void> {
 // Export all data (backup)
 export async function exportData(): Promise<ExportData> {
   try {
-    const [departments, shoppingLists, items, recentItems] = await Promise.all([
+    const [departments, shoppingLists, items, recentItems, collections, collectionItems, stores, storeLayouts, staples, itemPairs] = await Promise.all([
       db.departments.toArray(),
       db.shoppingLists.toArray(),
       db.items.toArray(),
       db.recentItems.toArray(),
+      db.collections.toArray(),
+      db.collectionItems.toArray(),
+      db.stores.toArray(),
+      db.storeLayouts.toArray(),
+      db.staples.toArray(),
+      db.itemPairs.toArray(),
     ]);
 
     const exportData: ExportData = {
-      version: '1.0.0',
+      version: '4.0.0',
       exportedAt: new Date().toISOString(),
       departments,
       shoppingLists,
       items,
       recentItems,
+      collections,
+      collectionItems,
+      stores,
+      storeLayouts,
+      staples,
+      itemPairs,
     };
 
     return exportData;
@@ -75,8 +136,8 @@ export async function exportData(): Promise<ExportData> {
 // Import data (restore) - Replace mode
 export async function importDataReplace(data: ExportData): Promise<void> {
   try {
-    // Validate version
-    if (!data.version || data.version !== '1.0.0') {
+    // Validate version (support 1.0.0, 2.0.0, 3.0.0, and 4.0.0)
+    if (!data.version || !['1.0.0', '2.0.0', '3.0.0', '4.0.0'].includes(data.version)) {
       throw new Error('Incompatible data version');
     }
 
@@ -86,15 +147,47 @@ export async function importDataReplace(data: ExportData): Promise<void> {
       db.shoppingLists.clear(),
       db.items.clear(),
       db.recentItems.clear(),
+      db.collections.clear(),
+      db.collectionItems.clear(),
+      db.stores.clear(),
+      db.storeLayouts.clear(),
+      db.staples.clear(),
+      db.itemPairs.clear(),
     ]);
 
     // Import new data
-    await Promise.all([
+    const imports = [
       db.departments.bulkAdd(data.departments),
       db.shoppingLists.bulkAdd(data.shoppingLists),
       db.items.bulkAdd(data.items),
       db.recentItems.bulkAdd(data.recentItems),
-    ]);
+    ];
+
+    // Add collections if present (v2.0.0+)
+    if (data.collections && data.collections.length > 0) {
+      imports.push(db.collections.bulkAdd(data.collections));
+    }
+    if (data.collectionItems && data.collectionItems.length > 0) {
+      imports.push(db.collectionItems.bulkAdd(data.collectionItems));
+    }
+
+    // Add stores if present (v3.0.0+)
+    if (data.stores && data.stores.length > 0) {
+      imports.push(db.stores.bulkAdd(data.stores));
+    }
+    if (data.storeLayouts && data.storeLayouts.length > 0) {
+      imports.push(db.storeLayouts.bulkAdd(data.storeLayouts));
+    }
+
+    // Add smart suggestions if present (v4.0.0+)
+    if (data.staples && data.staples.length > 0) {
+      imports.push(db.staples.bulkAdd(data.staples));
+    }
+    if (data.itemPairs && data.itemPairs.length > 0) {
+      imports.push(db.itemPairs.bulkAdd(data.itemPairs));
+    }
+
+    await Promise.all(imports);
 
     console.log('✅ Data imported successfully (replace mode)');
   } catch (error) {
@@ -106,8 +199,8 @@ export async function importDataReplace(data: ExportData): Promise<void> {
 // Import data (restore) - Merge mode
 export async function importDataMerge(data: ExportData): Promise<void> {
   try {
-    // Validate version
-    if (!data.version || data.version !== '1.0.0') {
+    // Validate version (support 1.0.0, 2.0.0, 3.0.0, and 4.0.0)
+    if (!data.version || !['1.0.0', '2.0.0', '3.0.0', '4.0.0'].includes(data.version)) {
       throw new Error('Incompatible data version');
     }
 
@@ -116,20 +209,39 @@ export async function importDataMerge(data: ExportData): Promise<void> {
     const existingListIds = new Set((await db.shoppingLists.toArray()).map(l => l.id));
     const existingItemIds = new Set((await db.items.toArray()).map(i => i.id));
     const existingRecentIds = new Set((await db.recentItems.toArray()).map(r => r.id));
+    const existingCollectionIds = new Set((await db.collections.toArray()).map(c => c.id));
+    const existingCollectionItemIds = new Set((await db.collectionItems.toArray()).map(ci => ci.id));
+    const existingStoreIds = new Set((await db.stores.toArray()).map(s => s.id));
+    const existingStoreLayoutIds = new Set((await db.storeLayouts.toArray()).map(sl => sl.id));
+    const existingStapleIds = new Set((await db.staples.toArray()).map(st => st.id));
+    const existingItemPairIds = new Set((await db.itemPairs.toArray()).map(ip => ip.id));
 
     // Filter out existing items
     const newDepartments = data.departments.filter(d => !existingDeptIds.has(d.id));
     const newLists = data.shoppingLists.filter(l => !existingListIds.has(l.id));
     const newItems = data.items.filter(i => !existingItemIds.has(i.id));
     const newRecent = data.recentItems.filter(r => !existingRecentIds.has(r.id));
+    const newCollections = data.collections?.filter(c => !existingCollectionIds.has(c.id)) || [];
+    const newCollectionItems = data.collectionItems?.filter(ci => !existingCollectionItemIds.has(ci.id)) || [];
+    const newStores = data.stores?.filter(s => !existingStoreIds.has(s.id)) || [];
+    const newStoreLayouts = data.storeLayouts?.filter(sl => !existingStoreLayoutIds.has(sl.id)) || [];
+    const newStaples = data.staples?.filter(st => !existingStapleIds.has(st.id)) || [];
+    const newItemPairs = data.itemPairs?.filter(ip => !existingItemPairIds.has(ip.id)) || [];
 
     // Add new data
-    await Promise.all([
-      newDepartments.length > 0 && db.departments.bulkAdd(newDepartments),
-      newLists.length > 0 && db.shoppingLists.bulkAdd(newLists),
-      newItems.length > 0 && db.items.bulkAdd(newItems),
-      newRecent.length > 0 && db.recentItems.bulkAdd(newRecent),
-    ]);
+    const imports = [];
+    if (newDepartments.length > 0) imports.push(db.departments.bulkAdd(newDepartments));
+    if (newLists.length > 0) imports.push(db.shoppingLists.bulkAdd(newLists));
+    if (newItems.length > 0) imports.push(db.items.bulkAdd(newItems));
+    if (newRecent.length > 0) imports.push(db.recentItems.bulkAdd(newRecent));
+    if (newCollections.length > 0) imports.push(db.collections.bulkAdd(newCollections));
+    if (newCollectionItems.length > 0) imports.push(db.collectionItems.bulkAdd(newCollectionItems));
+    if (newStores.length > 0) imports.push(db.stores.bulkAdd(newStores));
+    if (newStoreLayouts.length > 0) imports.push(db.storeLayouts.bulkAdd(newStoreLayouts));
+    if (newStaples.length > 0) imports.push(db.staples.bulkAdd(newStaples));
+    if (newItemPairs.length > 0) imports.push(db.itemPairs.bulkAdd(newItemPairs));
+
+    await Promise.all(imports);
 
     console.log('✅ Data imported successfully (merge mode)');
   } catch (error) {
@@ -146,6 +258,12 @@ export async function clearAllData(): Promise<void> {
       db.shoppingLists.clear(),
       db.items.clear(),
       db.recentItems.clear(),
+      db.collections.clear(),
+      db.collectionItems.clear(),
+      db.stores.clear(),
+      db.storeLayouts.clear(),
+      db.staples.clear(),
+      db.itemPairs.clear(),
     ]);
 
     // Re-initialize default departments
