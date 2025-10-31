@@ -1,0 +1,57 @@
+flowchart TD
+    Start([User Opens App]) --> ListSelect[List Selection Screen]
+
+    ListSelect --> HasLists{Has Lists?}
+
+    HasLists -->|No| CreateFirst[Create First List]
+    HasLists -->|Yes| ShowLists[Show All Lists]
+
+    CreateFirst --> EnterName1[Enter List Name]
+    EnterName1 --> ShoppingView1[Open Shopping View]
+
+    ShowLists --> SelectList[Select a List]
+    ShowLists --> NewList[+ New List Button]
+
+    NewList --> EnterName2[Enter List Name]
+    EnterName2 --> ShoppingView2[Open Shopping View]
+
+    SelectList --> ShoppingView[Shopping View Main]
+    ShoppingView1 --> ShoppingView
+    ShoppingView2 --> ShoppingView
+
+    ShoppingView --> Actions{User Action}
+
+    Actions -->|Add Item| AddModal[Item Entry Modal]
+    Actions -->|Check Item| CheckOff[Mark as Complete]
+    Actions -->|Delete Item| DeleteItem[Remove Item]
+    Actions -->|Share| ShareModal[Share List Modal]
+    Actions -->|Settings| SettingsView[Department Settings]
+
+    AddModal --> EnterItem[Enter Item Name]
+    EnterItem --> SelectDept[Select Department]
+    SelectDept --> SaveItem[Save Item]
+    SaveItem --> ShoppingView
+
+    CheckOff --> UpdateProgress[Update Progress Bar]
+    UpdateProgress --> ShoppingView
+
+    DeleteItem --> ShoppingView
+
+    ShareModal --> CopyText[Copy as Text]
+    ShareModal --> SystemShare[System Share]
+    CopyText --> ShoppingView
+    SystemShare --> ShoppingView
+
+    SettingsView --> ReorderDepts[Reorder Departments]
+    SettingsView --> ExportData[Export/Import Data]
+    ReorderDepts --> ShoppingView
+    ExportData --> ShoppingView
+
+    ShoppingView --> BackButton[← Back Button]
+    BackButton --> ListSelect
+
+    style Start fill:#10B981,stroke:#059669,color:#fff
+    style ShoppingView fill:#2563EB,stroke:#1D4ED8,color:#fff
+    style AddModal fill:#F59E0B,stroke:#D97706,color:#fff
+    style ShareModal fill:#8B5CF6,stroke:#7C3AED,color:#fff
+    style SettingsView fill:#EC4899,stroke:#DB2777,color:#fff

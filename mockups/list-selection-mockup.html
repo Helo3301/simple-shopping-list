@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Selection - Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f9fafb;
+            padding: 0;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            padding: 24px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .settings-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .content {
+            padding: 16px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #374151;
+        }
+        .list-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .list-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        }
+        .list-card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .list-icon {
+            font-size: 24px;
+        }
+        .list-name {
+            font-size: 18px;
+            font-weight: 600;
+            flex: 1;
+        }
+        .list-meta {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        .list-timestamp {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        .completed-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #d1fae5;
+            color: #065f46;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .new-list-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <div style="font-size: 28px; margin-bottom: 4px;">📝</div>
+            <h1>Simple Shopping List</h1>
+        </div>
+        <div class="settings-icon">⚙️</div>
+    </div>
+
+    <div class="content">
+        <div class="section-title">My Lists</div>
+
+        <div class="list-card">
+            <div class="list-card-header">
+                <span class="list-icon">📝</span>
+                <span class="list-name">Weekly Groceries</span>
+            </div>
+            <div class="list-meta">12 items • 3 checked</div>
+            <div class="list-timestamp">Updated 10 min ago</div>
+        </div>
+
+        <div class="list-card">
+            <div class="list-card-header">
+                <span class="list-icon">🎉</span>
+                <span class="list-name">Party Supplies</span>
+            </div>
+            <div class="list-meta">8 items • 0 checked</div>
+            <div class="list-timestamp">Updated 2 days ago</div>
+        </div>
+
+        <div class="list-card">
+            <div class="list-card-header">
+                <span class="list-icon">🌮</span>
+                <span class="list-name">Taco Tuesday</span>
+            </div>
+            <div class="list-meta">
+                <span class="completed-badge">
+                    <span>✓</span>
+                    <span>Completed</span>
+                </span>
+                <span style="margin-left: 8px;">5 items • 5 checked</span>
+            </div>
+            <div class="list-timestamp">Completed yesterday</div>
+        </div>
+
+        <button class="new-list-btn">
+            <span style="font-size: 20px;">+</span>
+            <span>New List</span>
+        </button>
+    </div>
+</body>
+</html>

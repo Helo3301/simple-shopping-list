@@ -1,0 +1,60 @@
+graph TD
+    App[App Component] --> Init[Initialize Database]
+    App --> Router{View Router}
+
+    Router --> ListSelect[ListSelection View]
+    Router --> Shopping[Shopping View]
+    Router --> Settings[Settings View]
+
+    ListSelect --> ListCard1[ListCard]
+    ListSelect --> ListCard2[ListCard]
+    ListSelect --> ListCard3[ListCard...]
+    ListSelect --> NewListBtn[New List Button]
+
+    Shopping --> Header[Header Component]
+    Shopping --> Progress[Progress Bar]
+    Shopping --> DeptSections[Department Sections]
+    Shopping --> FAB[Add Item FAB]
+
+    Header --> BackBtn[Back Button]
+    Header --> Title[List Title]
+    Header --> Menu[Actions Menu]
+
+    Menu --> ShareBtn[Share]
+    Menu --> SettingsBtn[Settings]
+
+    DeptSections --> Dept1[Department Section]
+    DeptSections --> Dept2[Department Section]
+    DeptSections --> Dept3[Department Section...]
+
+    Dept1 --> DeptHeader1[Department Header]
+    Dept1 --> Items1[Item Rows]
+
+    Items1 --> Item1[ItemRow]
+    Items1 --> Item2[ItemRow]
+    Items1 --> Item3[ItemRow...]
+
+    Item1 --> Checkbox1[Checkbox]
+    Item1 --> ItemText1[Item Text]
+    Item1 --> SwipeActions1[Swipe Actions]
+
+    FAB --> ItemModal[Item Entry Modal]
+
+    ItemModal --> NameInput[Name Input]
+    ItemModal --> RecentChips[Recent Item Chips]
+    ItemModal --> DeptSelect[Department Selector]
+    ItemModal --> ActionBtns[Action Buttons]
+
+    Settings --> DeptList[Department List]
+    Settings --> ExportSection[Export/Import]
+    Settings --> ThemeToggle[Dark Mode Toggle]
+
+    DeptList --> DeptItem1[Draggable Department]
+    DeptList --> DeptItem2[Draggable Department]
+    DeptList --> DeptItem3[Draggable Department...]
+
+    style App fill:#2563EB,stroke:#1D4ED8,color:#fff
+    style Shopping fill:#10B981,stroke:#059669,color:#fff
+    style ItemModal fill:#F59E0B,stroke:#D97706,color:#fff
+    style Settings fill:#8B5CF6,stroke:#7C3AED,color:#fff
+    style ListSelect fill:#EC4899,stroke:#DB2777,color:#fff

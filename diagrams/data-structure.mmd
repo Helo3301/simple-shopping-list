@@ -1,0 +1,38 @@
+erDiagram
+    Department ||--o{ ShoppingItem : "categorizes"
+    ShoppingList ||--o{ ShoppingItem : "contains"
+    Department ||--o{ RecentItem : "suggests"
+
+    Department {
+        string id PK
+        string name
+        string icon
+        string color
+        int sortOrder
+        boolean isDefault
+    }
+
+    ShoppingList {
+        string id PK
+        string name
+        timestamp createdAt
+        timestamp updatedAt
+    }
+
+    ShoppingItem {
+        string id PK
+        string listId FK
+        string departmentId FK
+        string name
+        boolean isChecked
+        timestamp checkedAt
+        timestamp createdAt
+    }
+
+    RecentItem {
+        string id PK
+        string name
+        string departmentId FK
+        int useCount
+        timestamp lastUsedAt
+    }

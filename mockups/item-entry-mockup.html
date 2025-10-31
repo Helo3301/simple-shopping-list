@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Item Modal - Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0;
+            max-width: 420px;
+            margin: 0 auto;
+            display: flex;
+            align-items: flex-end;
+            min-height: 100vh;
+        }
+        .modal {
+            background: white;
+            border-radius: 24px 24px 0 0;
+            width: 100%;
+            padding: 24px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .input:focus {
+            border-color: #2563eb;
+        }
+        .recent-items {
+            margin-top: 12px;
+        }
+        .recent-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        .chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .chip {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .chip:hover {
+            background: #e5e7eb;
+        }
+        .select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            background: white;
+            cursor: pointer;
+        }
+        .dept-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            cursor: pointer;
+        }
+        .dept-option:hover {
+            background: #f9fafb;
+        }
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        .btn-add {
+            background: #2563eb;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Add Item</div>
+            <div class="close-btn">✕</div>
+        </div>
+
+        <div class="form-group">
+            <label class="label">Item Name</label>
+            <input type="text" class="input" placeholder="Bananas" value="Bananas">
+
+            <div class="recent-items">
+                <div class="recent-label">Recent Items:</div>
+                <div class="chips">
+                    <div class="chip">Milk</div>
+                    <div class="chip">Eggs</div>
+                    <div class="chip">Bread</div>
+                    <div class="chip">Apples</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="label">Department</label>
+            <select class="select">
+                <option>🥬 Produce</option>
+                <option>🥩 Meat & Seafood</option>
+                <option>🥛 Dairy & Eggs</option>
+                <option>🍞 Bakery</option>
+                <option>❄️ Frozen Foods</option>
+                <option>🥫 Canned Goods</option>
+                <option>🍿 Snacks</option>
+                <option>🥤 Beverages</option>
+                <option>🧹 Cleaning Supplies</option>
+                <option>🧴 Personal Care</option>
+                <option>📦 Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="label">Quantity (optional)</label>
+            <input type="text" class="input" placeholder="e.g., 2 lbs, 1 bunch">
+        </div>
+
+        <div class="form-group">
+            <label class="label">Notes (optional)</label>
+            <input type="text" class="input" placeholder="e.g., organic, ripe">
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-cancel">Cancel</button>
+            <button class="btn btn-add">Add Item</button>
+        </div>
+    </div>
+</body>
+</html>
